@@ -6,7 +6,7 @@ REQUIREMENTS:
 - Pillow
 - PyQt6
 
-The program calculates the absolute difference and maps them with non-black for different pixels (non 0,0,0). After that it converts to grayscale for simplicity, and any non-black pixels are turned to white while likeness remains black.
+The program calculates the absolute difference and maps them with non-black for different pixels (RGB = 0,0,0). After that it converts to grayscale for simplicity, and any non-black pixels are turned to white while likeness remains black.
 
 The comparison function also returns a percent difference that can be viewed inside the GUI as well. 
 
