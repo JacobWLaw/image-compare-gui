@@ -11,3 +11,5 @@ The program calculates the absolute difference and maps them with non-black for 
 The comparison function also returns a percent difference that can be viewed inside the GUI as well. 
 
 Threshold value is able to be set within the GUI - the number set here is the number you are content with them being the same. I.E entering 50 means a image that is 50% similar will be accepted as a pass.
+
+NOTE: If images are extremely disimilar the resultant image will be almost unuseable. This is to be used to look at images that have commonality, but differences that aren't inherently obvious.
