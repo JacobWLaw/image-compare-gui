@@ -19,7 +19,7 @@ class image_compare():
 
         if difference_percentage < threshold:  
             diff_gray = diff.convert("L")
-            diff_highlighted = ImageOps.colorize(diff_gray, black="black", white="white")
+            diff_highlighted = ImageOps.colorize(diff_gray, black="black", white="red")
             return diff_highlighted, difference_percentage
         else:
             return None
