@@ -72,7 +72,7 @@ def create_app():
                 pixmap = QPixmap.fromImage(qim)
                 scaled_pixmap = pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio)
                 diff_label.setPixmap(scaled_pixmap)
-                status_label.setText(f"Comparison complete. Difference: {difference_percentage}")
+                status_label.setText(f"Comparison complete. Similarity: {difference_percentage}")
             else:
                 diff_label.setText("Images are similar (within threshold)")
                 status_label.setText("Images are similar (within threshold)")
