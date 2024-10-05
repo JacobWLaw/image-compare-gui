@@ -6,10 +6,20 @@ REQUIREMENTS:
 - Pillow
 - PyQt6
 
-The program calculates the absolute difference and maps them with non-black for different pixels (RGB = 0,0,0). After that it converts to grayscale for simplicity, and any non-black pixels are turned to red while likeness remains black.
+The program calculates the absolute difference and maps them. The comparison function also returns a percent difference that can be viewed inside the GUI as well. 
 
-The comparison function also returns a percent difference that can be viewed inside the GUI as well. 
+Currently, the image generated as the resultant is a bit scrambled, and layers all of the different pixels, this will be revised in a future update.
 
-Threshold value is able to be set within the GUI - the number set here is the number you are content with them being the same. I.E entering 50 means a image that is 50% similar will be accepted as a pass.
+NOTE: If images are extremely dissimilar the resultant image will be almost unusable. This is to be used on pictures with commonality but differences that aren't inherently obvious.
 
-NOTE: If images are extremely dissimilar the resultant image will be almost unuseable. This is to be used to look at images that have commonality, but differences that aren't inherently obvious.
+Example Usage:
+1. Load Baseline
+![image](https://github.com/user-attachments/assets/3c70606a-7314-4fc9-bf6d-6a96e204f134)
+
+2. Load Actual
+![image](https://github.com/user-attachments/assets/c49a183a-79d9-486b-8cc5-cdbd781ea87e)
+
+3. Compare
+![image](https://github.com/user-attachments/assets/b3a8d0c8-3186-4c8b-a1f1-f1c690a03ba8)
+
+
