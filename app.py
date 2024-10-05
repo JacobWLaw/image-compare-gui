@@ -1,37 +1,34 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QLabel, QLineEdit
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QFileDialog, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
-from compare_logic import image_compare
+from compare_logic import ImageCompare
 from PIL.ImageQt import ImageQt
 
 def create_app():
     app = QApplication(sys.argv)
     window = QWidget()
-    
     window.setWindowTitle("Comparison App")
-    window.setGeometry(100, 100, 400, 400)
+    window.setGeometry(100, 100, 1280, 720)
     
-    baseline_button = QPushButton("Upload Baseline", window)
-    baseline_button.setGeometry(50, 300, 100, 50)
+    main_layout = QVBoxLayout(window)
     
-    actual_button = QPushButton("Upload Actual", window)
-    actual_button.setGeometry(250, 300, 100, 50)
-    
-    status_label = QLabel("", window)
-    status_label.setGeometry(50, 250, 300, 30)
-    
-    threshold_label = QLabel("Define a threshold from 0-100:", window)
-    threshold_label.setGeometry(50, 350, 200, 50)
-    
-    threshold_value = QLineEdit(window)
-    threshold_value.setGeometry(225, 360, 50, 25)
-    threshold_value.setPlaceholderText("100")
-    
-    diff_label = QLabel(window)
-    diff_label.setGeometry(50, 50, 300, 200)
+    diff_label = QLabel("Difference image will appear here")
     diff_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    diff_label.setText("Difference image will appear here")
+    diff_label.setScaledContents(True) 
+
+    status_label = QLabel("")
+    status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    
+    buttons_layout = QHBoxLayout()
+    baseline_button = QPushButton("Upload Baseline")
+    actual_button = QPushButton("Upload Actual")
+    buttons_layout.addWidget(baseline_button)
+    buttons_layout.addWidget(actual_button)
+    
+    main_layout.addWidget(diff_label, stretch=3)  
+    main_layout.addWidget(status_label)
+    main_layout.addLayout(buttons_layout)
     
     baseline_path = ""
     actual_path = ""
@@ -54,34 +51,24 @@ def create_app():
             status_label.setText("Actual image uploaded")
             compare_images()
     
-    def update_threshold_value(value):
-        nonlocal curr_threshold
-        try:
-            threshold = int(value)
-            if 0 <= threshold <= 100:
-                curr_threshold = threshold
-        except ValueError:
-            status_label.setText("Invalid input. Please enter an integer.")
-    
     def compare_images():
         if baseline_path and actual_path:
-            img_compare = image_compare()
-            diff_image, difference_percentage = img_compare.comparison(baseline_path, actual_path, curr_threshold)
-            if diff_image:
+            img_compare = ImageCompare()
+            result = img_compare.comparison(baseline_path, actual_path)
+            if result:
+                diff_image, difference_percentage = result
                 qim = ImageQt(diff_image)
                 pixmap = QPixmap.fromImage(qim)
-                scaled_pixmap = pixmap.scaled(300, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                diff_label.setPixmap(scaled_pixmap)
-                status_label.setText(f"Comparison complete. Similarity: {difference_percentage}")
+                diff_label.setPixmap(pixmap.scaled(diff_label.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+                status_label.setText(f"Comparison complete. Difference: {difference_percentage:.2f}%")
             else:
-                diff_label.setText("Images are similar (within threshold)")
-                status_label.setText("Images are similar (within threshold)")
+                diff_label.setText("Difference exceeds threshold")
+                status_label.setText("Difference exceeds threshold")
         else:
             status_label.setText("Please upload both images first")
     
     baseline_button.clicked.connect(on_baseline_click)
     actual_button.clicked.connect(on_actual_click)
-    threshold_value.textChanged.connect(update_threshold_value)
     
     window.show()
     sys.exit(app.exec())
